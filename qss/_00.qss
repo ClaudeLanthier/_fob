@@ -1,1 +1,8 @@
-#con{}
+html{w1,h1}
+#canv_mnu div input{f.14,cen,w.60,o.2,m.2,b.1,pt.pb.2,}
+#forms_mnu div input{f.14,cen,o.2,m.2,b.1,pt.pb.2,}
+.mnu_ssec{p.10,b.0,o.2,mb.10}
+.sec_ttl{f.14,cen,mb.10,bb.222,pb.3}
+::-webkit-inner-spin-button { -webkit-appearance: none;}
+input[type=number] {-moz-appearance: textfield;}
+#canv_c{poi,width:64px!important;}
