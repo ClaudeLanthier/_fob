@@ -3,10 +3,12 @@
 var $_fob={
 	ini:function(){
 		$fob.dom.layout();
-		$fob.dom.menu.forms();
+		$fob.dom.menu.form.build();
 		$fob.dom.menu.canvas();
-		$fob.dom.menu.controls();
-		$fob.xxx.ini_size();
+		$fob.dom.menu.control();
+		$fob.dom.canvas.ini_size();
+		window.onresize=function(e){/*$fob.dom.canvas.reset_width();*/}
+
 		
 
 

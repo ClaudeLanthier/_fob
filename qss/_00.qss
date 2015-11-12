@@ -1,8 +1,39 @@
-html{w1,h1}
+html{w1,h1,c.f}
 #canv_mnu div input{f.14,cen,w.60,o.2,m.2,b.1,pt.pb.2,}
 #forms_mnu div input{f.14,cen,o.2,m.2,b.1,pt.pb.2,}
 .mnu_ssec{p.10,b.0,o.2,mb.10}
 .sec_ttl{f.14,cen,mb.10,bb.222,pb.3}
 ::-webkit-inner-spin-button { -webkit-appearance: none;}
-input[type=number] {-moz-appearance: textfield;}
+input[type=number] {w.60,-moz-appearance:textfield;}
+input{b.111,o.666}
+select{b.111,o.333}
 #canv_c{poi,width:64px!important;}
+#ctrl_mnu div div{f.14,dib,lh.20,vam}
+#ctrl_mnu div img{h.20,dib,m.2|5|2|0,vam,cursor:grabbing;}
+textarea{b.111,o.222,p.3,c.a}
+#popup input{text-align:left!important}
+
+select:-moz-focusring {color:transparent;text-shadow:0 0 0 #fff;}
+select:-moz-focusring * {color:#fff;text-shadow:none;}
+#delete_form{w1}
+#delete_form option{lft}
+#delete_study option{lft}
+
+select{cen,outline:0}
+option[value="0"]{c.444}
+option[value="1"]{c.045cb7}
+option[value="2"]{c.c00000}
+option{lft}
+option:first-child{cen}
+#canvas>input{cursor:grabbing;}
+
+
+[draggable] {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  /* Required to make elements draggable in old WebKit */
+  -khtml-user-drag: element;
+  -webkit-user-drag: element;
+}
