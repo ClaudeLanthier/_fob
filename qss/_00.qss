@@ -5,13 +5,13 @@ html{w1,h1,c.f}
 .sec_ttl{f.14,cen,mb.10,bb.222,pb.3}
 ::-webkit-inner-spin-button { -webkit-appearance: none;}
 input[type=number] {w.60,-moz-appearance:textfield;}
-input{b.111,o.666}
+input{b.111,bw.0}
 select{b.111,o.333}
 #canv_c{poi,width:64px!important;}
 #ctrl_mnu div div{f.14,dib,lh.20,vam}
 #ctrl_mnu div img{h.20,dib,m.2|5|2|0,vam,cursor:grabbing;}
-textarea{b.111,o.222,p.3,c.a}
-#popup input{text-align:left!important}
+textarea{p.3,c.a,bw.0,m.0}
+#popup input{o.333,text-align:left!important}
 
 select:-moz-focusring {color:transparent;text-shadow:0 0 0 #fff;}
 select:-moz-focusring * {color:#fff;text-shadow:none;}
@@ -26,7 +26,9 @@ option[value="2"]{c.c00000}
 option{lft}
 option:first-child{cen}
 #canvas>input{cursor:grabbing;}
-
+#canvas>div{cursor:grabbing;}
+#canvas>div:hover{b.c}
+div [type=radio]{r.10,b.000,o.666,bw.3,min-width:9px;min-height:9px;}
 
 [draggable] {
   -moz-user-select: none;

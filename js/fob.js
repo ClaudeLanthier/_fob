@@ -2,6 +2,7 @@
 var _o={};
 var $={
     xy:[],
+    key:0,
     study:{
         sel:1,
         all:[" select an option ","Add","Delete","Study_1"]
@@ -12,10 +13,12 @@ var $={
      },
     control:{
         sel:0,
-        all:["a","b","c"]
+        elm:{},
+        all:{}
      },
     dom:{
         layout:function(){
+            window.onkeypress=function(e){$.key=e.keyCode};
             no.targs=_o;
             no.$(document.body,{_s:'w1,h1, overflow:hidden;'},
                 no.div({id:"con_pag",_s:'abs,bot.0,rg.0,b.1,w1,h1,overflow:hidden;'},
@@ -24,10 +27,9 @@ var $={
                         no.div({id:"con_lft",_s:'abs,l.68,t.18,f.20,c.f'},"FORM BUILDER")
                     ),
                     no.div({id:"con_lft",_s:'abs,w.240,l.10,t.81,bot.10'}),
-                    no.div({id:"con_cen",_s:'abs,l.260,bot.10,rg.10,t.10,p.10,box,o.2,b.0,overflow:auto'},
-                        no.div({id:"canvas",_s:'abs,cen,box,o.3,background:url("img/light.png")repeat; overflow:auto;'},
+                    no.div({id:"con_cen",_s:'abs,l.260,bot.10,rg.10,t.10,p.10,box,o.2,b.f,overflow:auto'},
+                        no.div({id:"canvas",_s:'abs,cen,box,o.c,background:url("img/dark.png")repeat; overflow:auto;'},
                             function ondrop(o,e){
-                                //var dro=o.getAttribute("dro");
                                 if(_.drag.data(e).ctr){$.drag.icon(o,e)};
                                 if(_.drag.data(e).elt){$.drag.control(o,e)};
                                 _o.pdot.style.display="none"; 
@@ -35,9 +37,11 @@ var $={
                             function ondragover(o,e){
                                 l=Math.floor((e.pageX-$.xy[0])/10)*10;
                                 t=Math.floor((e.pageY-$.xy[1])/10)*10;
-                               _o.pdot.style.display="block"; 
-                               _o.pdot.style.top=t+"px";
-                               _o.pdot.style.left=l+"px";
+                                if(t>=20 && l>=270){
+                                   _o.pdot.style.display="block"; 
+                                   _o.pdot.style.top=t+"px";
+                                   _o.pdot.style.left=l+"px";
+                                }
                                // e.dataTransfer.setDragImage(o, 100, 0);
                             }
                         )
@@ -49,7 +53,7 @@ var $={
             no.targs=false;
          },
         menu:{
-            can_bgi:"img/light.png",
+            can_bgi:"img/dark.png",
             form:{
                 build:function(){
                     var me=this;
@@ -181,7 +185,7 @@ var $={
                     ),
                     no.div({_s:"vam"},
                         no.div({_s:"f.14,dib,w.60,lh.16,vam"}, "Color"),
-                        no.input({id:"canv_c",type:"color",_s:"h.21,vam"},function onchange(o){
+                        no.input({id:"canv_c",type:"color",_s:"h.21,vam",value:"#ffffff"},function onchange(o){
                             _o.con_cen.style.background=o.value;
                             var rgb=$.U.hex2rgb(o.value);
                             tot=rgb[0]+rgb[1]+rgb[2];
@@ -211,16 +215,16 @@ var $={
             control:function(){
                 no.targs=_o;
                 var icon=[
-                    {"ctr":"menu","elm":"ul"},
-                    {"ctr":"label","elm":"div"},
-                    {"ctr":"image","elm":"img"},
-                    {"ctr":"text","elm":"input","typ":"text"},
-                    {"ctr":"number","elm":"input","typ":"number"},
-                    {"ctr":"date","elm":"input","typ":"date"},
-                    {"ctr":"radio","elm":"input","typ":"radio"},
-                    {"ctr":"checkbox","elm":"input","typ":"checkbox"},
-                    {"ctr":"dropdown","elm":"select"},                      
-                    {"ctr":"textarea","elm":"textarea"}
+                    {"ctr":"menu","tagName":"ul"},
+                    {"ctr":"label","tagName":"div"},
+                    {"ctr":"image","tagName":"img"},
+                    {"ctr":"text","tagName":"input","type":"text"},
+                    {"ctr":"number","tagName":"input","type":"number"},
+                    {"ctr":"date","tagName":"input","type":"date"},
+                    {"ctr":"radio","tagName":"div","type":"radio"},
+                    {"ctr":"checkbox","tagName":"div","type":"checkbox"},
+                    {"ctr":"dropdown","tagName":"div"},                      
+                    {"ctr":"textarea","tagName":"textarea"}
                  ];
                 no.div(_o.con_lft,{id:"ctrl_mnu",_c:"mnu_ssec"},
                     no.div({id:"ctrl_ttl",_c:"sec_ttl"}, "CONTROLS")
@@ -241,122 +245,143 @@ var $={
         canvas:{
             grid:1,
             ini_size:function(){
-               var h=Math.floor(_o.con_cen.clientHeight/10);
-               var w=Math.floor(_o.con_cen.clientWidth/10);
+                var h=Math.floor(_o.con_cen.clientHeight/10),
+                    w=Math.floor(_o.con_cen.clientWidth/10);
                _o.canvas.style.height=(h*10-20)+"px";
                _o.canvas.style.width=(w*10-20)+"px";
             },
             reset_width:function(){
                 _o.canvas.style.width=_o.canv_w.value+"px";
-                var w=_o.canvas.getBoundingClientRect().width;
-                var wp=_o.con_cen.getBoundingClientRect().width;
-                lft=Math.ceil((wp-w)/20)*10
+                var w=_o.canvas.getBoundingClientRect().width,
+                    wp=_o.con_cen.getBoundingClientRect().width,
+                    lft=Math.ceil((wp-w)/20)*10;
                 _o.canvas.style.left=lft+"px";
             }
          },
         control:{
-            build:{
-                ul:function(v){
-                    $.control.sel="";
-                 },
-                div:function(v){
-                    $.control.sel=no.div(0,v.ob,{id:"",_drag:{elt:"div"},_s:"poi,aro,abs,l."+v.lf+",t."+v.top},
-                        function onmousedown(o,e){$.U.inr_xy(o,e); $.control.sel=o}
-                    )
-                 },
-                img:function(v){
-                   $.control.sel=no.img(0,v.ob,{_drag:{},_s:"aro,abs,l."+v.lf+",t."+v.top},
-                        function onmousedown(o,e){$.U.inr_xy(o,e); $.control.sel=o})
-                 },
-                input:function(v){
-                    var c=document.getElementsByClassName("dbi").length;
-                    $.control.sel=no.input(0,v.ob,{_drag:{elt:"input"},id:"id_"+c,_c:"dbi",_s:"aro,abs,l."+v.lf+",t."+v.top,type:v.d.typ},
-                        function onmousedown(o,e){$.U.inr_xy(o,e); $.control.sel=o})
-                 },
-                textarea:function(v){
-                    $.control.sel=no.textarea(0,v.ob,{_drag:{},_s:"abs,l."+v.lf+",t."+v.top},
-                        function onmousedown(o,e){$.U.inr_xy(o,e); $.control.sel=o})
-                 }
+            build:function(){
+                var  v=$.control.elm, me=this;
+                $.control.sel=no[v.tagName](0,v.tg,{_drag:{elt:v.tagName},_s:"abs,l."+v.att.left+",t."+v.att.top},
+                function onmousedown(o,e){
+                    if($.key==46){o.del();$.key=0}
+                    if($.key==13){me.popup.build();o.del();$.key=0}
+                    else{$.U.inr_xy(o,e); $.control.sel=o;}
+                })
+                if(v.typ){$.control.sel.setAttribute("type",v.typ)}
              },
-            modify:{
-                //
+            save:function(el){
+                var a=el.attributes,
+                c={"tagName":el.tagName};
+                if(el.innerHTML){c["innerHTML"]=el.innerHTML}
+                for (var i = 0; i < a.length; i++){
+                    c[a[i].name]=a[i].value
+                };
+                var k=(a.field)?a.field.value:a.eid.value;
+                $.control.all[k]=c;
              },
-            move:{
+            modify:function(o){
+                $.dom.control.build();
+                var v=this.popup.attrib,
+                c=$.control.sel;
+                _o.blanket.style.display="none";
+                for(var k in v){
+                    var p=v[k]["prop"];
+                    var s=("suf" in p)?p.suf:"";
+                    if("style" in p){c.style[p.style]=v[k].elm.value+s;c.innerHTML.delete;}
+                    if("innerHTML" in p){c.innerHTML=v[k].elm.value;}  
+                    if("att" in p){c.setAttribute(p.att,v[k].elm.value);c.innerHTML.delete;}  
+                }
+                this.popup.attrib={};
+                this.exists()
+                o.del();
+             },
+            exists:function(){
+                var c=$.control.sel,
+                    fe=(c.hasAttribute("field"))?c.getAttribute("field"):c.getAttribute("eid");
+                if($.db.get.control.f.indexOf(fe)<0 && fe!=""){this.save(c);}
+                else{c.del();_o.blanket.style.display="none";alert("Please choose a different field or element name");}
+             },
+            rebuild:function(vv){
+                /*
+                for(var kk in vv){
+                    o=no[vv.tagName](0,_o.canvas)
+                    for(l in a){
+                    for(var k in v){
+                        var p=v[k]["prop"];
+                        var s=("suf" in p)?p.suf:"";
+                        if("sty" in p){c.style[p.sty]=v[k].elm.value+s;c.innerHTML.delete;}
+                        if("inh" in p){c.innerHTML=v[k].elm.value;}  
+                        if("att" in p){c.setAttribute(p.att,v[k].elm.value);c.innerHTML.delete;}  
+                    }
+                }*/
+             },
+
+            edit:function(v){
                 //
-             },           
+             },         
             popup:{
-                att_val:{},
+                attrib:{},
                 inf:{
                     menu:[],
-                    label:["Text","Color","Font","Font size"],
-                    image:["Path/file","Height","Width"],
-                    text:["Field name","Width","Border color top"],
-                    number:["Field name","Width"],
-                    date:["Field name","Width"],
-                    radio:["Field name"],
-                    checkbox:["Field name"],
+                    label:["Element name","Text","Color","Font","Font size"],
+                    image:["Element name","Path/file","Height","Width"],
+                    text:["Field name","Width","Background color"],
+                    number:["Field name","Width","Background color"],
+                    date:["Field name","Width","Background color"],
+                    radio:["Field name","Background color"],
+                    checkbox:["Field name","Background color"],
                     dropdown:["Field name","Coma seperated options","Width"],
-                    textarea:["Field name","Width","Height"]
+                    textarea:["Field name","Width","Height","Background color"]
                  },
-                inputs:{
-                    "Text":{"elm":"input", "typ": "text","att":"innerHTML"},
-                    "Color":{"elm":"input", "typ": "color","att":"style.color"},
-                    "Border color top":{"elm":"input", "typ": "color","att":"style.borderTopColor"},
-                    "Font":{"elm":"input", "typ": "text","att":"style.fontFamily","dfl":"Arial"},
-                    "Font size":{"elm":"input", "typ": "number","att":"style.fontSize.px","dfl":"14"},
-                    "Path/file":{"elm":"input", "typ": "text","att":"src"},
-                    "Field name":{"elm":"input", "typ": "text","att":"field"},
-                    "Height":{"elm":"input", "typ": "number","att":"style.height.px"},
-                    "Width":{"elm":"input", "typ": "number","att":"style.width.px"},
-                    "Coma seperated options":{"elm":"textarea","att":"innerHTML"}
+                atts:{
+                    "Text":{"tagName":"input", "type":"text","innerHTML":"innerHTML"},
+                    "Color":{"tagName":"input", "type":"color","style":"color"},
+                    "Background color":{"tagName":"input", "type": "color","style":"backgroundColor","dfl":"#dddddd"},
+                    "Font":{"tagName":"input", "type": "text","style":"fontFamily","dfl":"Arial"},
+                    "Font size":{"tagName":"input", "type": "number","style":"fontSize","suf":"px","dfl":"14"},
+                    "Path/file":{"tagName":"input", "type":"text","att":"src"},
+                    "Field name":{"tagName":"input", "type": "text","att":"field"},
+                    "Height":{"tagName":"input", "type": "number","style":"height","suf":"px"},
+                    "Width":{"tagName":"input", "type": "number","style":"width","suf":"px"},
+                    "Coma seperated options":{"tagName":"textarea","innerHTML":"innerHTML"},
+                    "Element name":{"tagName":"input", "type":"text","att":"eid"}
                  },
-                build:function(v){
-                    var el={}, me=this,
-                    pp=no.div(0,_o.canvas,{id:"popup",_s:"abs,t."+(v.top+50)+",l."+v.lf+",z.3,b.000,o.666,p.10,r.5,lft"}),
-                    a=this.inf[v.d.ctr];
+                build:function(){
+                    var v=$.control.elm,el={}, me=this,
+                    //pp=no.div(0,_o.canvas,{id:"popup",_s:"abs,t."+(v.top+50)+",l."+v.lf+",z.3,b.000,o.666,p.10,r.5,lft"}),
+                    pp=no.div(0,_o.canvas,{id:"popup",_s:"abs,t."+(v.top+50)+",l."+v.left+",z.3,b.000,o.666,p.10,r.5,lft"}),
+                    a=this.inf[v.ctr];
                     _o.blanket.style.display="block";
-                    no.div(pp,v.d.ctr,{_s:"cen,bb.222,mb.4,pb.2,text-transform: uppercase;"})
+                    no.div(pp,v.ctr,{_s:"cen,bb.222,mb.4,pb.2,text-transform: uppercase;"})
                     for(k in a){
-                        var ip=this.inputs[a[k]];
+                        var ip=this.atts[a[k]];
                         no.div(pp,a[k],{_s:"lft"});
-                        if(ip.elm=="input"){
-                            el=no.input(0,pp,{_s:"mb.5,lft",type:ip.typ,att:ip.att});
-                            if(ip.dfl){el.setAttribute("value",ip.dfl);}
-                        }
-                        else if(ip.elm=="textarea"){el=no.textarea(0,pp,{_s:"mb.3,lft",att:ip.att});}
-                        else {el=no.select(0,pp,{_s:"mb.3,lft",att:ip.att})}
-                        this.att_val[a[k]]=el;
+                        el=no[ip.tagName](0,pp,{_s:"mb.5,lft",type:ip.typ});
+                        if("type" in ip){el.setAttribute("type",ip.type)}
+                        //if("typ" in ip){el.setAttribute("type",ip.typ)}
+                        if("dfl" in ip){el.setAttribute("value",ip.dfl);}
+                   // cl(ip.dfl)
+                        var prop={}
+                        if("innerHTML" in ip){prop["innerHTML"]=ip.innerHTML}
+                        //if("inh" in ip){prop["inh"]=ip.inh}
+                        if("att" in ip){prop["att"]=ip.att}
+                        if("style" in ip){prop["style"]=ip.style}
+                        if("suf" in ip){prop["suf"]=ip.suf}
+                        this.attrib[a[k]]={elm:el, prop:prop};
                     }
+
                     no.div(pp,{_s:"cen"},
-                        no.div("SAVE",  {_s:"cen,bb.333,dib,w.30%,o.666,f.10,r.10,mt.10,poi,mr.20"},function(){me.save(pp)}),
+                        no.div("SAVE",{_s:"cen,bb.333,dib,w.30%,o.666,f.10,r.10,mt.10,poi,mr.20"},function(){
+                            $.dom.control.modify(pp);
+                            }
+                        ),
                         no.div("CANCEL",{_s:"cen,bb.333,dib,w.30%,o.666,f.10,r.10,mt.10,poi"},function(){me.close(pp)})
                     )
                  },
                 close:function(o){
                     _o.blanket.style.display="none";
                     o.del();
-                    $.control.sel.del()
-                 },
-                save:function(o){
-                    var v=this.att_val,
-                    cs=$.control.sel;
-                    _o.blanket.style.display="none";
-                    for(var k in v){
-                        var at=v[k].getAttribute("att").split(".");
-                        if(at.length>1){
-                            var p=at.length==3?at[2]:"";
-                            cs.style[at[1]]=v[k].value+p;
-                        }
-                        else if(at[0]=="innerHTML"){cs.innerHTML=v[k].value;}
-                        else{cs.setAttribute(at[0],v[k].value);}
-
-                        
-                        //cl(this.inputs[k].att)
-                        //$.dom.control.modify()
-                    }
-                    //cl($.dom.control.attr)
-                    //$.new_el;
-                    o.del();
+                    //$.control.sel.del()
                  }
              }
          }
@@ -365,17 +390,18 @@ var $={
         icon:function(o,e){
             var l=Math.floor((e.clientX-$.xy[0]-260)/10)*10-10,
                 t=Math.floor((e.clientY-$.xy[1]-10)/10)*10-10,
-                nu=$.control.all.length,
-                v={d:_.drag.data(e),lf:l,top:t,ob:o,ev:e,idn:nu};
-            $.dom.control.build[v.d.elm](v);
-            $.dom.control.popup.build(v);
+                d=_.drag.data(e);
+           // $.control.elm={ctr:d.ctr,tag:d.elm,tg:o,typ:d.typ,att:{lft:l,top:t}};
+            $.control.elm={ctr:d.ctr,tagName:d.tagName,tg:o,type:d.type,att:{left:l,top:t}};
+            $.dom.control.popup.build();
          },
         control:function(o,e){
-            var ob=$.control.sel,        
+            var ob=$.control.sel,
                 l=Math.floor((e.clientX-$.xy[0]-260)/10)*10-10,
                 t=Math.floor((e.clientY-$.xy[1]-10)/10)*10-10;
             ob.style.left=l+"px";     
             ob.style.top=t+"px";
+            $.dom.control.save(ob);
          }
      },  
     db:{
@@ -386,8 +412,8 @@ var $={
             form:{
                 //
              },
-            contols:{
-                //
+            control:{
+               f:["aaa","bbb"]
              }
          },
         update:{
@@ -397,7 +423,7 @@ var $={
             form:{
                 //
              },
-            contols:{
+            control:{
                 //
              }
          },
@@ -408,7 +434,7 @@ var $={
             form:{
                 //
              },
-            contols:{
+            control:{
                 //
              }
          }
